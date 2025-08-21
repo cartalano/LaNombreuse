@@ -17,6 +17,9 @@
   "devDependencies": {
     "@nuxt/image": "^1.11.0",
     "@nuxtjs/seo": "^3.1.0",
-    "sass": "^1.90.0"
+    "@types/node": "^24.3.0",
+    "sass": "^1.90.0",
+    "typescript": "^5.9.2",
+    "vue-tsc": "^3.0.6"
   }
 }
