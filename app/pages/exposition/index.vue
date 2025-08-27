@@ -62,7 +62,7 @@ function excerpt(text?: string, words = 50) {
 <style scoped>
 .wrap {
   max-width: 960px;
-  margin: 0 auto;
+  margin-left: 10px;
   padding: 32px 16px 80px;
 }
 
