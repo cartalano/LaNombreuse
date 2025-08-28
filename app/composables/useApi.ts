@@ -2,16 +2,25 @@
 import type { Ref } from 'vue'
 import { useRuntimeConfig, useFetch } from 'nuxt/app'
 
-function buildQS(params: Record<string, any>) {
+function buildQS(params: Record<string, any>): string {
   const qp = new URLSearchParams()
-  for (const [k, v] of Object.entries(params)) {
-    if (v == null) continue
-    if (Array.isArray(v)) v.forEach(val => qp.append(k, String(val)))
-    else qp.append(k, String(v))
+
+  const add = (key: string, value: any) => {
+    if (value === undefined || value === null) return
+    if (Array.isArray(value)) {
+      value.forEach((v, i) => add(`${key}[${i}]`, v))
+    } else if (typeof value === 'object') {
+      Object.entries(value).forEach(([k, v]) => add(`${key}[${k}]`, v))
+    } else {
+      qp.append(key, String(value))
+    }
   }
+
+  Object.entries(params).forEach(([k, v]) => add(k, v))
   const s = qp.toString()
   return s ? `?${s}` : ''
 }
+
 
 export function useApi() {
   const { public: { apiBase } } = useRuntimeConfig()

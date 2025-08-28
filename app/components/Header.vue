@@ -6,7 +6,10 @@
 
     <div class="links">
       <NuxtLink to="/exposition">Exposition</NuxtLink>
-      <NuxtLink to="/conference">Conference</NuxtLink>
+      <NuxtLink to="/fotofort">Fotofort</NuxtLink>
+      <NuxtLink to="/workshop">Workshop</NuxtLink>
+      <NuxtLink to="/showoff">ShowOff</NuxtLink>
+      <NuxtLink to="/ekip">Ekip</NuxtLink>
       <NuxtLink to="/contact">Contact</NuxtLink>
     </div>
   </nav>
