@@ -9,24 +9,15 @@ const route = useRoute()
 const { get } = useApi()
 const { galleryUrls } = useMedia()
 
-const res = await get<any>('/fotoforts', {
+const res = await get<any>('/showoffs', {
   'filters[slug][$eq]': String(route.params.slug),
-  // ✅ populate sûr (les clés existent dans ton modèle)
-  populate: {
-    images: { fields: ['url', 'alternativeText', 'width', 'height'] },
-    period: true,
-    speakers: true,
-    lieu: true
-  },
+  populate: ['images', 'period', 'lieu'],
   'pagination[pageSize]': 1
 })
-
 const raw = computed(() => res.value?.data?.[0] ?? null)
-if (!raw.value) setResponseStatus(404) // si aucun item, on met le status 404
+if (!raw.value) setResponseStatus(404)
 
-// flatten { id, ...attributes }
 const item = computed(() => raw.value?.attributes ? ({ id: raw.value.id, ...raw.value.attributes }) : raw.value)
-// urls d’images via ton composable
 const gallery = computed(() => galleryUrls(item.value))
 
 function fmtRange(period?: { startDate?: string; endDate?: string }) {
@@ -38,10 +29,9 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
 }
 </script>
 
-
 <template>
   <main class="wrap" v-if="item">
-    <NuxtLink to="/fotofort" class="back" aria-label="Retour">
+    <NuxtLink to="/showoff" class="back" aria-label="Retour">
       <svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </NuxtLink>
 
@@ -54,16 +44,19 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
       <img v-for="(src,i) in gallery" :key="i" :src="src" :alt="`${item.title} — visuel ${i+1}`" loading="lazy" />
     </section>
 
-    <section v-if="item.description" class="body content" v-html="item.description" />
+    <section v-if="typeof item.description === 'string'" class="body content">
+      <p v-for="(p,i) in item.description.split(/\n{2,}/)" :key="i">{{ p }}</p>
+    </section>
   </main>
 
   <main v-else class="wrap">
-    <NuxtLink to="/fotofort" class="back" aria-label="Retour">
-      <svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <NuxtLink to="/showoff" class="back" aria-label="Retour">
+      <svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" /></svg>
     </NuxtLink>
-    <p>fotofort introuvable.</p>
+    <p>Projet Showoff introuvable.</p>
   </main>
 </template>
+
 
 <style scoped>
 /* conteneur sobre */
