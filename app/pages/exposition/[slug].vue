@@ -32,6 +32,7 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
   const end = period.endDate ? fmt.format(new Date(period.endDate)) : ''
   return end ? `${start} — ${end}` : start
 }
+
 </script>
 
 <template>
@@ -59,6 +60,7 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
         :alt="`${item.title} — visuel ${i+1}`"
         loading="lazy"
       />
+      <VideoEmbed v-if="item.videoUrl" :url="item.videoUrl" />
     </section>
 
     <!-- Texte -->
