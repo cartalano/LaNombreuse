@@ -33,8 +33,8 @@ jobs:
       # Option A : tu mets les URLs Render ici en dur
       - name: Build (Nuxt generate)
         env:
-          NUXT_PUBLIC_API_BASE: "https://lanombreuse.onrender.com/api"
-          NUXT_PUBLIC_MEDIA_BASE: "https://lanombreuse.onrender.com"
+          NUXT_PUBLIC_API_BASE: "https://strapi-lanombreuse.onrender.com/api"
+          NUXT_PUBLIC_MEDIA_BASE: "https://strapi-lanombreuse.onrender.com"
         run: npm run generate
 
       # Option B : (mieux) tu mets ces URLs dans des Secrets
