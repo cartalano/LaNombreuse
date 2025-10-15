@@ -7,7 +7,7 @@ const { get } = useApi()
 const { coverUrl } = useMedia()
 
 const res = await get<any>('/expositions', {
-  populate: ['images', 'period'],
+  populate: ['images', 'period',],
   sort: 'createdAt:desc',
   'pagination[pageSize]': 20
 })
@@ -48,9 +48,12 @@ function excerpt(text?: string, words = 50) {
         </figure>
 
         <div class="content">
-          <h2 class="title">
-            <NuxtLink :to="`/exposition/${e.slug}`">{{ e.title }}</NuxtLink>
+          <h2 class="title"><NuxtLink :to="`/exposition/${e.slug}`">
+              {{ e.title }}
+              <span v-if="e.expotitre"> — <em>{{ e.expotitre }}</em></span>
+            </NuxtLink>
           </h2>
+
           <p v-if="e.period" class="date">{{ fmtRange(e.period) }}</p>
           <p v-if="e.description" class="excerpt">{{ excerpt(e.description) }}</p>
         </div>
@@ -62,7 +65,7 @@ function excerpt(text?: string, words = 50) {
 <style scoped>
 .wrap {
   max-width: 960px;
-  margin-left: 10px;
+  margin-left: 30px;
   padding: 32px 16px 80px;
 }
 
@@ -82,18 +85,19 @@ function excerpt(text?: string, words = 50) {
   display: flex;
   gap: 24px;
   align-items: flex-start;
+  margin-left: 26px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #ffffff;
 }
 
 .media {
+  margin: 0;
   flex: 0 0 280px; /* largeur fixe image */
 }
 .media img {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 8px;
 }
 
 .content {
@@ -120,6 +124,8 @@ function excerpt(text?: string, words = 50) {
   color: #333;
   line-height: 1.5;
   margin: 0;
+  text-align: justify;
+  hyphens: auto;
 }
 .empty {
   color: #666;

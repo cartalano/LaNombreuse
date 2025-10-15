@@ -9,7 +9,8 @@
       <NuxtLink to="/fotofort">Fotofort</NuxtLink>
       <NuxtLink to="/workshop">Workshop</NuxtLink>
       <NuxtLink to="/showoff">ShowOff</NuxtLink>
-      <NuxtLink to="/ekip">Ekip</NuxtLink>
+      <NuxtLink to="/studioMobile">Studio Mobile</NuxtLink>
+      <NuxtLink to="/equipe">Équipe</NuxtLink>
       <NuxtLink to="/contact">Contact</NuxtLink>
     </div>
   </nav>
@@ -29,7 +30,7 @@ nav {
 
 /* Logo */
 .logo img {
-  height: 24px; /* proche de la taille du texte */
+  height: 26px; /* proche de la taille du texte */
   object-fit: contain; /* garde les proportions */
   vertical-align: middle;
 }

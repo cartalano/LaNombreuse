@@ -1,33 +1,32 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { setResponseStatus } from '#app'
 import { useApi } from '../../composables/useApi'
 import { marked } from 'marked'
 
 /* ----------------------------------------------------------
-   CONFIG DE BASE
+   CONFIG
 ---------------------------------------------------------- */
 const route = useRoute()
 const { get, mediaUrl } = useApi()
 
-// Typage d'image enrichie
 type ImgItem = { src: string; alt: string; caption: string }
 
 /* ----------------------------------------------------------
    OUTILS
 ---------------------------------------------------------- */
-
-/** Normalise un champ média Strapi (flat/single/multiple) */
+/** Normalise un champ média Strapi (flat / single / multiple) → tableau d’attributes */
 function nodesFrom(field: any): any[] {
   if (!field) return []
   if (Array.isArray(field?.data)) return field.data.map((n: any) => n?.attributes ?? n)
-  if (field?.data?.attributes) return [field.data.attributes]
-  if (Array.isArray(field)) return field
-  if (field?.url) return [field]
+  if (field?.data?.attributes)   return [field.data.attributes]
+  if (Array.isArray(field))       return field
+  if (field?.url)                 return [field]
   return []
 }
 
-/** Transforme un tableau d’objets Strapi en ImgItem[] */
+/** Transforme attributes Strapi en ImgItem[], avec filtre optionnel image/* */
 function toImages(nodes: any[], onlyImages = false): ImgItem[] {
   return nodes
     .filter((n) => !onlyImages || (n?.mime ?? '').startsWith('image/'))
@@ -39,56 +38,54 @@ function toImages(nodes: any[], onlyImages = false): ImgItem[] {
     .filter((i) => !!i.src)
 }
 
-/* ----------------------------------------------------------
-   FETCH DE L’EXPOSITION
----------------------------------------------------------- */
-const res = await get<any>('/expositions', {
-  'filters[slug][$eq]': route.params.slug,
-  populate: ['images', 'period', 'artists', 'location', 'files'],
+const res = await get<any>('/studio-mobiles', {
+  'filters[slug][$eq]': String(route.params.slug),
+  populate: {
+    images: { fields: ['url','alternativeText','caption','width','height','mime'] },
+    files:  { fields: ['url','alternativeText','caption','width','height','mime'] },
+    period: true,
+  },
   'pagination[pageSize]': 1
 })
 
 const raw = computed(() => res.value?.data?.[0] ?? null)
-const item = computed(() => raw.value?.attributes ? ({ id: raw.value.id, ...raw.value.attributes }) : raw.value)
+if (!raw.value) setResponseStatus(404)
+
+const item = computed(() =>
+  raw.value?.attributes ? ({ id: raw.value.id, ...raw.value.attributes }) : raw.value
+)
 
 /* ----------------------------------------------------------
    COMPUTED
 ---------------------------------------------------------- */
+const heroImages = computed<ImgItem[]>(() => toImages(nodesFrom(item.value?.images)))
+const fileImages = computed<ImgItem[]>(() => toImages(nodesFrom(item.value?.files), true))
 
-// Images principales avec légendes
-const heroImages = computed(() => toImages(nodesFrom(item.value?.images)))
-
-// Fichiers (autres visuels)
-const fileImages = computed(() => toImages(nodesFrom(item.value?.files), true))
-
-// Description markdown → HTML
+// Description Markdown → HTML (si tu la stockes en Markdown)
 const descriptionHtml = computed(() =>
   item.value?.description ? marked.parse(item.value.description) : ''
 )
 
-// Format de période
+// Période FR
 function fmtRange(period?: { startDate?: string; endDate?: string }) {
   if (!period?.startDate) return ''
   const fmt = new Intl.DateTimeFormat('fr-FR', { year: 'numeric', month: 'long', day: '2-digit' })
-  const start = fmt.format(new Date(period.startDate))
-  const end = period.endDate ? fmt.format(new Date(period.endDate)) : ''
-  return end ? `${start} — ${end}` : start
+  const a = fmt.format(new Date(period.startDate))
+  const b = period.endDate ? fmt.format(new Date(period.endDate)) : ''
+  return b ? `${a} — ${b}` : a
 }
 </script>
 
-
-
-
 <template>
   <main class="wrap" v-if="item">
-    <NuxtLink to="/exposition" class="back" aria-label="Retour à la liste des expositions">
+    <NuxtLink to="/studioMobile" class="back" aria-label="Retour à la liste des studios mobile">
       <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </NuxtLink>
 
     <header class="head">
-      <h1 class="title">{{ item.title }}<span v-if="item.expotitre"> — <em>{{ item.expotitre }}</em></span></h1>
+      <h1 class="title">{{ item.title }}</h1>
       <p v-if="item.period" class="date">{{ fmtRange(item.period) }}</p>
     </header>
 
@@ -98,90 +95,82 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
         <img :src="img.src" :alt="img.alt || `${item.title} — visuel ${i+1}`" loading="lazy" />
         <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
       </figure>
-      <VideoEmbed v-if="item.videoUrl" :url="item.videoUrl" />
     </section>
 
-    <!-- Texte -->
+    <!-- Texte (Markdown) -->
     <section v-if="descriptionHtml" class="body content" v-html="descriptionHtml" />
 
-    <!-- Fichiers images -->
+    <!-- Fichiers images / médias additionnels (images seulement) -->
     <section v-if="fileImages.length" class="gallery">
       <figure v-for="(img,i) in fileImages" :key="`file-${i}`" class="media">
         <img :src="img.src" :alt="img.alt || `${item.title} — fichier ${i+1}`" loading="lazy" />
         <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
       </figure>
     </section>
+
+    <!-- Vidéo optionnelle -->
+    <section v-if="item.videoUrl" class="gallery">
+      <div class="video-wrap">
+        <VideoEmbed :url="item.videoUrl" />
+      </div>
+    </section>
   </main>
 
   <main v-else class="wrap">
-    <NuxtLink to="/exposition" class="back" aria-label="Retour">
+    <NuxtLink to="/studioMobile" class="back" aria-label="Retour">
       <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </NuxtLink>
-    <p>Exposition introuvable.</p>
+    <p>Studio mobile introuvable.</p>
   </main>
 </template>
 
-
 <style scoped>
-.wrap { 
-  max-width: 960px; 
-  margin-left: 10px; 
-  padding: 24px 16px 80px; 
+.wrap {
+  max-width: 960px;
+  margin-left: 10px;
+  padding: 24px 16px 40px;
 }
 
-.back { 
-  display: inline-flex; 
-  align-items: center; 
-  color: #111; 
+/* Back */
+.back {
+  display: inline-flex;
+  align-items: center;
+  color: #111;
   text-decoration: none;
-   margin-bottom: 12px; 
-  }
-  
-.back:hover { 
-  opacity: .8; 
+  margin-bottom: 12px;
 }
+.back:hover { opacity: .8; }
 
-.head { 
-  display: block; 
-  gap: 16px;  
-  margin-bottom: 16px; 
-}
+/* Header */
+.head { display: block; gap: 16px; margin-bottom: 16px; }
+.title { font-size: 28px; line-height: 1.2; margin: 0; }
+.date  { margin: 0; color: #666; font-size: 14px; }
 
-.title { 
-  font-size: 28px; 
-  line-height: 1.2; 
-  margin: 0; 
+/* Galerie */
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: 12px 0 24px;
 }
-
-.date { 
-  margin: 0; 
-  color: #666; 
-  font-size: 14px; 
-}
-
-.gallery { 
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 16px; 
-  margin: 12px 0 24px; 
-}
-.gallery img { 
-  display: block; 
-  width: 100%; 
-  max-width: 900px; 
-  height: auto;
-  margin: 0 auto; 
-}
-
 .media {
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+.media img {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  border-radius: 8px;
+  margin: 0 auto;
+}
 
+/* Crédit photo */
 .credit {
   margin-top: 6px;
   width: 100%;
@@ -189,17 +178,27 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
   font-size: 12px;
   color: #777;
   font-style: italic;
-  text-align: left;  /* ou left si tu préfères */
+  text-align: left;
 }
 
-.body { 
-  line-height: 1.65; 
+/* Texte */
+.body {
+  line-height: 1.65;
   color: #222;
   text-align: justify;
-  text-justify: inter-word; 
 }
 .body :deep(p) { margin: 0 0 1em; }
 
+/* Vidéo */
+.video-wrap {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Responsive */
 @media (min-width: 1024px) {
   .gallery { grid-template-columns: 1fr 1fr; }
 }

@@ -1,55 +1,81 @@
 // app/composables/useMedia.ts
 import { useApi } from './useApi'
 
-/**
- * Helpers médias compatibles avec :
- * - structure Strapi "classique"  => images.data[].attributes.url
- * - structure "aplatie" (ton cas) => images[].url
- */
+type MediaItem = { url: string; alt: string };
+
+// Normalize ANY Strapi media field (single/multiple, flat/classic) to [{url, alt}]
+function normalizeToArray(field: any): MediaItem[] {
+  const out: MediaItem[] = []
+
+  // 1) flat multiple: [{ url, alternativeText }, ...]
+  if (Array.isArray(field) && field.length && typeof field[0] === 'object' && 'url' in field[0]) {
+    for (const f of field) out.push({ url: f?.url || '', alt: f?.alternativeText || '' })
+    return out
+  }
+
+  // 2) flat single: { url, alternativeText }
+  if (field && typeof field === 'object' && 'url' in field) {
+    out.push({ url: field?.url || '', alt: field?.alternativeText || '' })
+    return out
+  }
+
+  // 3) classic multiple: { data: [{ attributes: { url, alternativeText }}, ...] }
+  if (Array.isArray(field?.data)) {
+    for (const node of field.data as any[]) {
+      const a = node?.attributes
+      if (a?.url) out.push({ url: a.url, alt: a.alternativeText || '' })
+    }
+    return out
+  }
+
+  // 4) classic single: { data: { attributes: { url, alternativeText } } }
+  if (field?.data?.attributes?.url) {
+    const a = field.data.attributes
+    out.push({ url: a.url, alt: a.alternativeText || '' })
+  }
+
+  return out
+}
+
 export function useMedia() {
   const { mediaUrl } = useApi()
 
-  /** Retourne le chemin relatif de la 1re image trouvée (ou undefined) */
-  function firstImagePath(obj: any): string | undefined {
-    // cas aplati
-    const flat = obj?.images?.[0]?.url
-    if (flat) return flat
-    // cas Strapi classique
-    return obj?.images?.data?.[0]?.attributes?.url
+  function urlsFrom(field: any): string[] {
+    return normalizeToArray(field)
+      .map(i => i.url)
+      .filter(Boolean)
+      .map(u => mediaUrl(u))
   }
 
-  /** Retourne l'URL absolue de la 1re image (ou '') */
-  function coverUrl(obj: any): string {
-    const rel = firstImagePath(obj)
-    return rel ? mediaUrl(rel) : ''
+  function firstUrlFrom(field: any): string {
+    return urlsFrom(field)[0] || ''
   }
 
-  /** Retourne une galerie (URLs absolues) */
-  function galleryUrls(obj: any): string[] {
-    // cas aplati
-    if (Array.isArray(obj?.images) && obj.images[0]?.url) {
-      return obj.images.map((m: any) => mediaUrl(m.url)).filter(Boolean)
-    }
-    // cas Strapi classique
-    const d = obj?.images?.data
-    if (Array.isArray(d)) {
-      return d
-        .map((x: any) => x?.attributes?.url)
-        .filter(Boolean)
-        .map((u: string) => mediaUrl(u))
-    }
-    return []
+  function firstAltFrom(field: any): string {
+    return normalizeToArray(field)[0]?.alt || ''
   }
 
-  /** Texte alternatif (si présent) */
-  function altText(obj: any): string {
-    // aplati
-    if (Array.isArray(obj?.images) && obj.images[0]?.alternativeText) {
-      return obj.images[0].alternativeText
-    }
-    // classique
-    return obj?.images?.data?.[0]?.attributes?.alternativeText ?? ''
+  
+  
+
+  /** Portrait + portfolio (override keys if needed) */
+  function galleryFrom(obj: any, opts?: { cover?: string; gallery?: string; limit?: number }) {
+    const coverKey = opts?.cover ?? 'photo'
+    const gallKey  = opts?.gallery ?? 'portfolio'
+    const limit    = opts?.limit ?? 6
+
+    const cover = firstUrlFrom(obj?.[coverKey])
+    const gallery = urlsFrom(obj?.[gallKey]).slice(0, Math.max(0, limit - (cover ? 1 : 0)))
+    return cover ? [cover, ...gallery] : gallery
   }
 
-  return { firstImagePath, coverUrl, galleryUrls, altText }
+  // Back-compat with your old helpers
+  function coverUrl(obj: any) {
+    return firstUrlFrom(obj?.images ?? obj?.photo ?? obj)
+  }
+  function galleryUrls(obj: any) {
+    return urlsFrom(obj?.images ?? obj?.portfolio ?? obj)
+  }
+
+  return { urlsFrom, firstUrlFrom, firstAltFrom, galleryFrom, coverUrl, galleryUrls }
 }

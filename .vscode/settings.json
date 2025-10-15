@@ -1,0 +1,7 @@
+{
+  "webhint.enable": false,
+  "typescript.tsdk": "node_modules/typescript/lib",   // utilise la version TS du projet
+  "vue.server.hybridMode": true,                      // Volar takeover
+  "files.exclude": { "**/.nuxt/**": true },
+  "search.exclude": { "**/.nuxt/**": true }
+}

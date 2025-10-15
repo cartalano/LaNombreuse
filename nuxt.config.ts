@@ -1,15 +1,31 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { fileURLToPath, URL } from 'node:url'
+
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  runtimeConfig: {
-    public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:1337/api',
+  ssr: false,
+
+  css: ['~/assets/css/main.css'],
+
+  vite: {
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./', import.meta.url)),
+        '~': fileURLToPath(new URL('./', import.meta.url)),
+      },
     },
   },
-  css: [
-    '../assets/css/main.css'
-  ]
+
+  app: {
+    baseURL: process.env.GITHUB_ACTIONS ? '/LaNombreuse/' : '/',
+  },
+
+  nitro: {
+    preset: process.env.GITHUB_ACTIONS ? 'github-pages' : undefined,
+  },
+
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://strapi-lanombreuse-api.onrender.com/api',
+      mediaBase: process.env.NUXT_PUBLIC_MEDIA_BASE || 'https://strapi-lanombreuse-api.onrender.com',
+    },
+  },
 })
-
-

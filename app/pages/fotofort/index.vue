@@ -86,11 +86,11 @@ function excerpt(input: unknown, words = 40) {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 8px;
 }
 
 .content {
   flex: 1;
+  text-align: justify;
 }
 
 .title {

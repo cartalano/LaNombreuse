@@ -4,40 +4,41 @@ import { useRuntimeConfig, useFetch } from 'nuxt/app'
 
 function buildQS(params: Record<string, any>): string {
   const qp = new URLSearchParams()
-
-  const add = (key: string, value: any) => {
-    if (value === undefined || value === null) return
-    if (Array.isArray(value)) {
-      value.forEach((v, i) => add(`${key}[${i}]`, v))
-    } else if (typeof value === 'object') {
-      Object.entries(value).forEach(([k, v]) => add(`${key}[${k}]`, v))
-    } else {
-      qp.append(key, String(value))
-    }
+  const add = (k: string, v: any) => {
+    if (v == null) return
+    if (Array.isArray(v)) v.forEach((x, i) => add(`${k}[${i}]`, x))
+    else if (typeof v === 'object') Object.entries(v).forEach(([kk, vv]) => add(`${k}[${kk}]`, vv))
+    else qp.append(k, String(v))
   }
-
   Object.entries(params).forEach(([k, v]) => add(k, v))
   const s = qp.toString()
   return s ? `?${s}` : ''
 }
 
-
 export function useApi() {
-  const { public: { apiBase } } = useRuntimeConfig()
+  const config = useRuntimeConfig()
 
-  // ex: http://localhost:1337/api -> http://localhost:1337
-  const assetsBase = apiBase.replace(/\/api\/?$/, '')
-  function mediaUrl(path?: string) {
+  // API (toujours public côté client)
+  const apiBase = config.public.apiBase                          // ex: http://localhost:1337/api
+  // Base Strapi pour les médias (exposée en public)
+  const strapiBase = config.public.strapiURL || apiBase.replace(/\/api\/?$/, '')
+
+  function mediaUrl(path = ''): string {
     if (!path) return ''
-    if (path.startsWith('http')) return path
-    return `${assetsBase}${path}`
+    return path.startsWith('http') ? path : `${strapiBase}${path}`
   }
 
-  async function get<T>(path: string, params: Record<string, any> = {}) {
-    const url = `${apiBase}${path}${buildQS(params)}`
-    const { data, error } = await useFetch<T>(url, { key: url, server: true })
-    if (error.value) throw error.value
-    return data as Ref<T>
+  async function get<T = any>(
+    path: string,
+    params: Record<string, any> = {}
+  ): Promise<Ref<T | null>> {
+    const url = (path.startsWith('http') ? path : `${apiBase}${path}`) + buildQS(params)
+    const r = (await useFetch<T>(url, { key: url, server: true })) as {
+      data: Ref<T | null>
+      error: Ref<any>
+    }
+    if (r.error.value) throw r.error.value
+    return r.data
   }
 
   return { get, mediaUrl }

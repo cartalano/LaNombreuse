@@ -6,49 +6,56 @@ import { useMedia } from '../../composables/useMedia'
 const { get } = useApi()
 const { coverUrl } = useMedia()
 
-const res = await get<any>('/workshops', {
+const res = await get<any>('/studio-mobiles', {
   populate: ['images', 'period'],
   sort: 'createdAt:desc',
   'pagination[pageSize]': 20
 })
+
 const raw = computed(() => Array.isArray(res.value?.data) ? res.value!.data : [])
 const items = computed(() =>
-  raw.value.map((it:any) => it.attributes ? ({ id: it.id, ...it.attributes }) : it)
+  raw.value.map((it:any) => it?.attributes ? ({ id: it.id, ...it.attributes }) : it)
 )
 
+// format de date FR
 function fmtRange(period?: { startDate?: string; endDate?: string }) {
   if (!period?.startDate) return ''
   const fmt = new Intl.DateTimeFormat('fr-FR', { year:'numeric', month:'long', day:'2-digit' })
-  const a = fmt.format(new Date(period.startDate))
-  const b = period.endDate ? fmt.format(new Date(period.endDate)) : ''
-  return b ? `${a} — ${b}` : a
+  const start = fmt.format(new Date(period.startDate))
+  const end = period.endDate ? fmt.format(new Date(period.endDate)) : ''
+  return end ? `${start} — ${end}` : start
 }
-function excerpt(text?: string, words = 40) {
-  if (typeof text !== 'string') return ''
+
+// extrait des 50 premiers mots
+function excerpt(text?: string, words = 50) {
+  if (!text) return ''
   return text.split(/\s+/).slice(0, words).join(' ') + '…'
 }
 </script>
 
 <template>
   <main class="wrap">
-    <h1 class="page-title">Workshops</h1>
+    <h1 class="page-title">Studio Mobile</h1>
 
-    <section v-if="items.length" class="list">
-      <article v-for="w in items" :key="w.id ?? w.slug" class="item">
-        <figure v-if="coverUrl(w)" class="media">
-          <NuxtLink :to="`/workshop/${w.slug}`">
-            <img :src="coverUrl(w)" :alt="w.title" loading="lazy" />
+    <p v-if="!items.length" class="empty">Aucun studio mobile trouvée…</p>
+
+    <section v-else class="list">
+      <article v-for="e in items" :key="e.id ?? e.slug" class="item">
+        <figure v-if="coverUrl(e)" class="media">
+          <NuxtLink :to="`/studioMobile/${e.slug}`">
+            <img :src="coverUrl(e)" :alt="e.title" loading="lazy" />
           </NuxtLink>
         </figure>
+
         <div class="content">
-          <h2 class="title"><NuxtLink :to="`/workshop/${w.slug}`">{{ w.title }}</NuxtLink></h2>
-          <p v-if="w.period" class="date">{{ fmtRange(w.period) }}</p>
-          <p v-if="typeof w.description === 'string'" class="excerpt">{{ excerpt(w.description, 50) }}</p>
+          <h2 class="title">
+            <NuxtLink :to="`/studioMobile/${e.slug}`">{{ e.title }}</NuxtLink>
+          </h2>
+          <p v-if="e.period" class="date">{{ fmtRange(e.period) }}</p>
+          <p v-if="e.description" class="excerpt">{{ excerpt(e.description) }}</p>
         </div>
       </article>
     </section>
-
-    <p v-else>Aucun workshop trouvé…</p>
   </main>
 </template>
 
@@ -86,11 +93,11 @@ function excerpt(text?: string, words = 40) {
   display: block;
   width: 100%;
   height: auto;
+  border-radius: 8px;
 }
 
 .content {
   flex: 1;
-  text-align: justify;
 }
 
 .title {

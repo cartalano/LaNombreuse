@@ -7,7 +7,7 @@ const { get } = useApi()
 const { coverUrl } = useMedia()
 
 const res = await get<any>('/showoffs', {
-  populate: ['images', 'period', 'lieu'],      // adapte si tu as d’autres relations
+  populate: ['images', 'period',],      // adapte si tu as d’autres relations
   sort: 'createdAt:desc',
   'pagination[pageSize]': 20
 })
@@ -87,11 +87,11 @@ function excerpt(text?: string, words = 40) {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 8px;
 }
 
 .content {
   flex: 1;
+  text-align: justify;
 }
 
 .title {
