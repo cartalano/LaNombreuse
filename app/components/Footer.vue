@@ -7,7 +7,7 @@
         <img
           v-for="(logo, i) in logos"
           :key="i"
-          :src="logo.url"
+          :src="base(logo.url)"
           :alt="logo.alt"
           loading="lazy"
         />
@@ -17,13 +17,16 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig()
+
+// petit helper pour gérer les chemins publics
+const base = (path: string) => `${config.app.baseURL.replace(/\/$/, '')}${path}`
 
 const logos = [
-  { url: '/FWB-logo.png', alt: 'Partenaire 1' },
-  { url: '/cocof.png', alt: 'Partenaire 2' },
-  { url: '/ASAP_Logo.jpg', alt: 'Partenaire 3' },
-  { url: '/incidence2.png', alt: 'Partenaire 4' },
-
+  { url: '/FWB-logo.png', alt: 'FWB' },
+  { url: '/cocof.png', alt: 'COCOF' },
+  { url: '/ASAP_Logo.jpg', alt: 'ASAP' },
+  { url: '/incidence2.png', alt: 'Incidence' },
 ]
 </script>
 
