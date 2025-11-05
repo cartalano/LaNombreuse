@@ -15,17 +15,17 @@ export default defineNuxtConfig({
   },
 
   app: {
-    baseURL: process.env.GITHUB_ACTIONS ? '/LaNombreuse/' : '/',
+    baseURL: '/',     
   },
 
   nitro: {
-    preset: process.env.GITHUB_ACTIONS ? 'github-pages' : undefined,
+    preset: 'static', 
   },
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://lanombreuse-api.onrender.com/api',
-      mediaBase: process.env.NUXT_PUBLIC_MEDIA_BASE || 'https://lanombreuse-api.onrender.com',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE,   
+      mediaBase: process.env.NUXT_PUBLIC_MEDIA_BASE, 
     },
   },
 })

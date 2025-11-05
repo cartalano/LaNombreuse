@@ -43,7 +43,7 @@ function excerpt(text?: string, words = 50) {
       <article v-for="e in items" :key="e.id ?? e.slug" class="item">
         <figure v-if="coverUrl(e)" class="media">
           <NuxtLink :to="`/exposition/${e.slug}`">
-            <img v-media="coverUrl(e)" :alt="e.title" loading="lazy" />
+            <img :src="coverUrl(e)" :alt="e.title" loading="lazy" />
           </NuxtLink>
         </figure>
 
