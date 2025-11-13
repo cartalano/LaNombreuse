@@ -2,15 +2,15 @@ name: Deploy Staging (Nuxt static → Infomaniak)
 
 on:
   push:
-    branches: [ main ]       
-  workflow_dispatch:         
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     env:
-      NUXT_PUBLIC_API_BASE:  ${{ secrets.NUXT_PUBLIC_API_BASE }}
+      NUXT_PUBLIC_API_BASE: ${{ secrets.NUXT_PUBLIC_API_BASE }}
       NUXT_PUBLIC_MEDIA_BASE: ${{ secrets.NUXT_PUBLIC_MEDIA_BASE }}
 
     steps:
@@ -30,9 +30,9 @@ jobs:
         run: npm run generate
 
       - name: Deploy to Infomaniak via FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4   
         with:
-          server:   ${{ secrets.FTP_HOST }}
+          server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           protocol: ftps
