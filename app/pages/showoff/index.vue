@@ -7,7 +7,7 @@ const { get } = useApi()
 const { coverUrl } = useMedia()
 
 const res = await get<any>('/showoffs', {
-  populate: ['images', 'period',],      // adapte si tu as d’autres relations
+  populate: ['images', 'period',],      
   sort: 'createdAt:desc',
   'pagination[pageSize]': 20
 })
@@ -33,6 +33,11 @@ function excerpt(text?: string, words = 40) {
 <template>
   <main class="wrap">
     <h1 class="page-title">Showoff</h1>
+    <p class="intro">
+      Tu veux confronter ton projet artistique au regard du public ?
+La Nombreuse met son espace à disposition pour présenter ton travail en cours le temps d’un week-end
+ afin de te permettre d’expérimenter, d’échanger et de faire évoluer ta pratique.
+</p>
 
     <section v-if="items.length" class="list">
       <article v-for="e in items" :key="e.id ?? e.slug" class="item">
@@ -64,6 +69,13 @@ function excerpt(text?: string, words = 40) {
   font-size: 28px;
   line-height: 1.2;
   margin: 0 0 24px;
+}
+
+.intro {
+  font-size: 16px;
+  margin-bottom: 32px;
+  color: #000000;
+  line-height: 1.5;
 }
 
 .list {
