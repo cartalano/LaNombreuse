@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const contact = {
   name: "La Nombreuse",
-  addressLine1: "Rue du fort 42",
+  addressLine1: "Rue du fort 42222",
   addressLine2: "1060 Bruxelles",
   email: "lanombreuse@gmail.com",
   photoUrl: "Nombreuse_expo_2022_2.jpg",
