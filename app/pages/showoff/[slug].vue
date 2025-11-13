@@ -12,6 +12,13 @@ const route = useRoute()
 const { get, mediaUrl } = useApi()
 
 type ImgItem = { src: string; alt: string; caption: string }
+type MediaItem = {
+  kind: 'image' | 'video'
+  src: string
+  alt: string
+  caption: string
+  mime?: string
+}
 
 /* ----------------------------------------------------------
    OUTILS
@@ -39,6 +46,29 @@ function toImages(nodes: any[], onlyImages = false): ImgItem[] {
     .filter((i) => !!i.src)
 }
 
+/** Transforme attributes Strapi en MediaItem[] (image et/ou vidéo) */
+function toMedia(nodes: any[]): MediaItem[] {
+  return nodes
+    .map((a: any) => {
+      const mime = a?.mime ?? ''
+      const isImage = mime.startsWith('image/')
+      const isVideo = mime.startsWith('video/')
+      if (!a?.url || (!isImage && !isVideo)) return null
+
+      const base = {
+        src: mediaUrl(a.url),
+        alt: a?.alternativeText || '',
+        caption: a?.caption || '',
+        mime
+      }
+
+      return isImage
+        ? ({ kind: 'image', ...base } as MediaItem)
+        : ({ kind: 'video', ...base } as MediaItem)
+    })
+    .filter(Boolean) as MediaItem[]
+}
+
 /* ----------------------------------------------------------
    FETCH (Showoff)
 ---------------------------------------------------------- */
@@ -46,7 +76,7 @@ const res = await get<any>('/showoffs', {
   'filters[slug][$eq]': String(route.params.slug),
   populate: {
     images: { fields: ['url','alternativeText','caption','width','height','mime'] },
-    files:  { fields: ['url','alternativeText','caption','width','height','mime'] },
+    files:  { fields: ['url','alternativeText','caption','width','height','mime','previewUrl'] },
     period: true,
   },
   'pagination[pageSize]': 1
@@ -66,8 +96,8 @@ const item = computed(() =>
 // Images principales (avec captions)
 const heroImages = computed<ImgItem[]>(() => toImages(nodesFrom(item.value?.images)))
 
-// Fichiers médias additionnels (images uniquement)
-const fileImages = computed<ImgItem[]>(() => toImages(nodesFrom(item.value?.files), true))
+// Fichiers médias additionnels (images + vidéos)
+const fileMedia = computed<MediaItem[]>(() => toMedia(nodesFrom(item.value?.files)))
 
 // Description Markdown → HTML
 const descriptionHtml = computed(() =>
@@ -108,15 +138,31 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
     <!-- Description -->
     <section v-if="descriptionHtml" class="body content" v-html="descriptionHtml" />
 
-    <!-- Fichiers images additionnels -->
-    <section v-if="fileImages.length" class="gallery">
-      <figure v-for="(img,i) in fileImages" :key="`file-${i}`" class="media">
-        <img :src="img.src" :alt="img.alt || `${item.title} — fichier ${i+1}`" loading="lazy" />
-        <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
+    <!-- Fichiers médias additionnels (images + vidéos) -->
+    <section v-if="fileMedia.length" class="gallery">
+      <figure v-for="(m,i) in fileMedia" :key="`file-${i}`" class="media">
+        <template v-if="m.kind === 'image'">
+          <img :src="m.src" :alt="m.alt || `${item.title} — fichier ${i+1}`" loading="lazy" />
+        </template>
+
+        <template v-else>
+          <video
+            class="video"
+            :aria-label="m.alt || `${item.title} — vidéo ${i+1}`"
+            controls
+            preload="metadata"
+            playsinline
+          >
+            <source :src="m.src" :type="m.mime" />
+            Votre navigateur ne supporte pas la lecture vidéo HTML5.
+          </video>
+        </template>
+
+        <figcaption v-if="m.caption" class="credit">{{ m.caption }}</figcaption>
       </figure>
     </section>
 
-    <!-- Vidéo (optionnelle) -->
+    <!-- Vidéo (optionnelle par URL directe) -->
     <section v-if="item.videoUrl" class="gallery">
       <div class="video-wrap">
         <VideoEmbed :url="item.videoUrl" />
@@ -141,7 +187,6 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
   padding: 24px 16px 40px;
 }
 
-/* Back */
 .back {
   display: inline-flex;
   align-items: center;
@@ -151,12 +196,10 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
 }
 .back:hover { opacity: .8; }
 
-/* Header */
 .head { display: block; gap: 16px; margin-bottom: 16px; }
 .title { font-size: 28px; line-height: 1.2; margin: 0; }
 .date  { margin: 0; color: #666; font-size: 14px; }
 
-/* Galerie */
 .gallery {
   display: grid;
   grid-template-columns: 1fr;
@@ -169,7 +212,8 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
   flex-direction: column;
   align-items: center;
 }
-.media img {
+.media img,
+.media .video {
   display: block;
   width: 100%;
   max-width: 900px;
