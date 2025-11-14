@@ -76,6 +76,8 @@ function excerpt(text?: string, words = 40) {
   margin-bottom: 32px;
   color: #000000;
   line-height: 1.5;
+  border-bottom: #000000 1px solid;
+  padding-bottom: 12px;
 }
 
 .list {

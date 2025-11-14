@@ -84,6 +84,8 @@ function excerpt(text?: string, words = 50) {
   margin-bottom: 42px;
   color: #000000;
   line-height: 1.5;
+  border-bottom: #000000 1px solid;
+  padding-bottom: 12px;
 }
 
 .list {

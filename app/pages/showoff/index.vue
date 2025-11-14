@@ -76,6 +76,8 @@ La Nombreuse met son espace à disposition pour présenter ton travail en cours 
   margin-bottom: 32px;
   color: #000000;
   line-height: 1.5;
+  border-bottom: #000000 1px solid;
+  padding-bottom: 12px;
 }
 
 .list {

@@ -77,6 +77,8 @@ function excerpt(input: unknown, words = 40) {
   margin-bottom: 32px;
   color: #000000;
   line-height: 1.5;
+  border-bottom: #000000 1px solid;
+  padding-bottom: 12px;
 }
 
 .list {
@@ -90,7 +92,6 @@ function excerpt(input: unknown, words = 40) {
   gap: 24px;
   align-items: flex-start;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e7e7e7;
 }
 
 .media {

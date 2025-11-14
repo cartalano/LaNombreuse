@@ -4,7 +4,7 @@ const contact = {
   addressLine1: "Rue du fort 42222",
   addressLine2: "1060 Bruxelles",
   email: "lanombreuse@gmail.com",
-  photoUrl: "Nombreuse_expo_2022_2.jpg",
+  photoUrl: "/Nombreuse_expo_2022_2.jpg",
   mapUrl: "https://www.google.com/maps/place/La+Nombreuse/@50.8288276,4.3422884,19z/data=!3m1!4b1!4m6!3m5!1s0x47c3c52b4f439c89:0x44070cb9fabd22b2!8m2!3d50.8288276!4d4.3429321!16s%2Fg%2F11r4_tb911?entry=ttu&g_ep=EgoyMDI1MDkyMS4wIKXMDSoASAFQAw%3D%3D"
 }
 </script>
