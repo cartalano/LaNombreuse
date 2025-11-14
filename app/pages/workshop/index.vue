@@ -32,6 +32,12 @@ function excerpt(text?: string, words = 40) {
 <template>
   <main class="wrap">
     <h1 class="page-title">Workshops</h1>
+    <p class="intro"> 
+      Gratuits et ouverts à toutes et tous,
+      les Workshops Sauvage sont des ateliers photo participatifs à destination d’un jeune public.
+      Animés par des photographes professionnel·le·s. les enfants, adolescent·e·s et jeunes adultes y 
+      questionnent leur identité, la fabrication des images et le flux visuel qui les entoure.
+    </p>
 
     <section v-if="items.length" class="list">
       <article v-for="w in items" :key="w.id ?? w.slug" class="item">
@@ -63,6 +69,13 @@ function excerpt(text?: string, words = 40) {
   font-size: 28px;
   line-height: 1.2;
   margin: 0 0 24px;
+}
+
+.intro {
+  font-size: 16px;
+  margin-bottom: 32px;
+  color: #000000;
+  line-height: 1.5;
 }
 
 .list {

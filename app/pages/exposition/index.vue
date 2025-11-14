@@ -36,6 +36,10 @@ function excerpt(text?: string, words = 50) {
 <template>
   <main class="wrap">
     <h1 class="page-title">Expositions</h1>
+    <p class="intro">
+      Deux rendez-vous annuels dédiés aux photographes qui présentent leurs créations photographiques et plastiques via un commissariat collaboratif.
+      Chaque exposition s’accompagne de visites guidées, d’ateliers et d’événements spécifiques pour vivre ensemble des temps d’exploration artistique.
+    </p>
 
     <p v-if="!items.length" class="empty">Aucune expo trouvée…</p>
 
@@ -75,6 +79,13 @@ function excerpt(text?: string, words = 50) {
   margin: 0 0 24px;
 }
 
+.intro {
+  font-size: 16px;
+  margin-bottom: 42px;
+  color: #000000;
+  line-height: 1.5;
+}
+
 .list {
   display: flex;
   flex-direction: column;
@@ -83,16 +94,15 @@ function excerpt(text?: string, words = 50) {
 
 .item {
   display: flex;
-  gap: 24px;
+  gap: 34px;
   align-items: flex-start;
-  margin-left: 26px;
   padding-bottom: 24px;
   border-bottom: 1px solid #ffffff;
 }
 
 .media {
   margin: 0;
-  flex: 0 0 280px; /* largeur fixe image */
+  flex: 0 0 280px; 
 }
 .media img {
   display: block;

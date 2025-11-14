@@ -42,7 +42,7 @@ async function subscribe() {
 
 <template>
   <section class="nl">
-    <div class="nl-inner">        <!-- ⬅️ conteneur centré -->
+    <div class="nl-inner">       
       <div class="nl-left">
         <h2 class="nl-title">Abonnez-vous à notre newsletter</h2>
         <form @submit.prevent="subscribe" class="nl-form">
@@ -62,7 +62,7 @@ async function subscribe() {
       </div>
 
       <div class="nl-right">
-        <h2 class="nl-title">Suivez-nous</h2>   <!-- ⬅️ même classe & niveau -->
+        <h2 class="nl-title">Suivez-nous</h2>   
         <div class="socials">
           <a href="https://www.instagram.com/lanombreuse" target="_blank" aria-label="Instagram">
             <img src="/instagram.png" alt="Instagram" />
@@ -81,37 +81,37 @@ async function subscribe() {
 
 
 <style scoped>
-/* Section & centrage */
+
 .nl {
   padding: 2rem 0;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
 
-/* --- CONTENEUR CENTRÉ + LAYOUT G/D --- */
+
 .nl-inner{
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 16px;
 
-  display: flex;                 /* ⇦ Flex au lieu de Grid */
+  display: flex;                 
   align-items: flex-start;
   justify-content: space-between;
   gap: 48px;
-  flex-wrap: nowrap;             /* ⇦ empêche l'empilement en desktop */
+  flex-wrap: nowrap;            
 }
 
-/* Colonne gauche = prend tout l’espace restant */
+
 .nl-left{
   flex: 1 1 0;
-  min-width: 420px;              /* ajuste si besoin */
-  max-width: 720px;              /* limite confortable */
+  min-width: 420px;              
+  max-width: 720px;              
 }
 
-/* Colonne droite = largeur fixe */
+
 .nl-right{
-  flex: 0 0 360px;               /* ⇦ “colonne” de 360px */
-  min-width: 300px;              /* pour sécurité */
+  flex: 0 0 360px;               
+  min-width: 300px;              
 }
 
 /* Titres harmonisés */
@@ -146,7 +146,7 @@ async function subscribe() {
 }
 .nl-form button:hover{ background:#333; }
 
-/* Réseaux sociaux */
+
 .socials{
   display: flex;
   gap: 1rem;

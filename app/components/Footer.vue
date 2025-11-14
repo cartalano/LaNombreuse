@@ -61,7 +61,5 @@ const logos = [
   object-fit: contain;
   transition: opacity 0.2s;
 }
-.logos img:hover {
-  opacity: 0.7;
-}
+
 </style>

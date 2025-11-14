@@ -34,6 +34,13 @@ function excerpt(input: unknown, words = 40) {
 <template>
   <main class="wrap">
     <h1 class="page-title">Fotoforts</h1>
+    <p class="intro">
+      Un projecteur, deux invité·e·s, trente places assises.
+      Les Fotofort sont des projections photographiques au format carte blanche,
+      sans modération. Photographes, curateur·rice·s et acteur·rice·s culturels y partagent leurs
+      projets en cours dans une atmosphère conviviale, comme à la maison.
+
+    </p>
     <section v-if="items.length" class="list">
       <article v-for="w in items" :key="w.id ?? w.slug" class="item">
         <figure v-if="coverUrl(w)" class="media">
@@ -63,6 +70,13 @@ function excerpt(input: unknown, words = 40) {
   font-size: 28px;
   line-height: 1.2;
   margin: 0 0 24px;
+}
+
+.intro {
+  font-size: 16px;
+  margin-bottom: 32px;
+  color: #000000;
+  line-height: 1.5;
 }
 
 .list {
