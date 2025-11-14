@@ -11,7 +11,11 @@ const contact = {
 
 <template>
   <main class="wrap">
-    <h1 class="page-title">Contact</h1>
+    <p class="intro">
+      Créée en 2020, La Nombreuse n’est ni une galerie ni un “white cube", mais un espace polymorphe dédié à la création photographique.<br /> <br />
+      A sa racine; 8 photographes et une coordinatrice qui partageaient plusieurs envies. Créer de nouvelles synergies et mettre en commun leurs compétences afin de présenter aux publics les nombreux talents qui s’activent dans les domaines qui touchent la photographie.<br /> <br />
+      Ensemble, iels s’appliquent à montrer la vivacité et la richesse de cette scène en partageant avec celles et ceux qui le souhaitent leur passion pour l’image à travers des expositions novatrices, des visites guidées, des workshops gratuits pour publics spécifiques, des animations scolaires, des conférences et discussions, des collaborations surprenantes. En transmettant simplement des clés de compréhension et de lecture, La Nombreuse partage ses connaissances et ses apprentissages au sujet des images qui façonnent notre époque, nos sociétés comme nos identités. 
+    </p>
 
     <section class="card">
       <div class="info">
@@ -43,14 +47,22 @@ const contact = {
 </template>
 
 <style scoped>
+
 .wrap {
   max-width: 980px;
-  margin-left: 10px;
-  padding: 32px 16px 80px;
+  margin: 0 auto;
+  padding: 20px 16px 80px;
 }
 .page-title {
   font-size: 28px;
   margin: 0 0 20px;
+}
+
+.intro {
+  font-size: 16px;
+  margin-bottom: 32px;
+  color: #000000;
+  line-height: 1.2;
 }
 
 .card {
