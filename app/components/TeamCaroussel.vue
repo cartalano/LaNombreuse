@@ -62,10 +62,8 @@ function onKey(e: KeyboardEvent) {
 /* conteneur : on garde le ratio naturel (height auto) */
 .frame {
   position: relative;
-  width: 70%;
-  height: var(--member-frame-h, 480px);
+  width: 100%;
   overflow: hidden;
-  margin-left: 34px;
   background: #f4f4f4;
 }
 .card .frame { --member-frame-h: 560px; }

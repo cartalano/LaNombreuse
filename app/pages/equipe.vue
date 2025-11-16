@@ -60,8 +60,8 @@ const members = computed(() =>
 
 <style scoped>
 .wrap {
-  max-width: 1200px;
-  margin-left: 10px;
+  max-width: 960px;
+  margin-left: 30px;
   padding: 32px 16px 80px;
   text-align: justify;
 }
@@ -75,12 +75,21 @@ const members = computed(() =>
 .team { 
   display: flex; 
   flex-direction: column; 
-  gap: 2rem; 
+  gap: 5rem; 
 }
+
+.bio { 
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.3; 
+}
+
+
+
 .card { 
-  display: grid; 
-  grid-template-columns: 520px 1fr; 
-  gap: 1.25rem; 
+  display: grid;
+  grid-template-columns: 320px 1fr; 
+  gap: 3rem; 
   align-items: start; 
 }
 .left, .right { 

@@ -36,8 +36,18 @@ function excerpt(text?: string, words = 50) {
 <template>
   <main class="wrap">
     <h1 class="page-title">Studio Mobile</h1>
+    <p class="intro"><h2> Studio photographique itinérant</h2>
+        Depuis 2020, La Nombreuse propose, sur demande, des studios photographiques itinérants.<br /><br />
+        Légers, mobiles et adaptables, nos studios s’installent aussi bien en intérieur qu’en extérieur.<br /><br />
+        Piloté par un duo de photographes et accompagné d’une personne dédiée à l’accueil du public,
+        ce dispositif est pensé comme un outil de rencontre et de cartographie sensible d’un lieu à un instant T :
+        une place publique en plein été, une fête de Nouvel An, une brocante, un événement familial, la Foire du Midi…<br /><br />
+        Menée collectivement, chaque session permet aux participant·es de repartir avec une photo de famille, un portrait, ou une trace digitale de ce moment partagé.
+        <h2>Envie de proposer cette expérience ?</h2>
+        lanombreuse@gmail.com
+    </p>
 
-    <p v-if="!items.length" class="empty">Aucun studio mobile trouvée…</p>
+    <p v-if="!items.length" class="empty"></p>
 
     <section v-else class="list">
       <article v-for="e in items" :key="e.id ?? e.slug" class="item">
@@ -62,7 +72,7 @@ function excerpt(text?: string, words = 50) {
 <style scoped>
 .wrap {
   max-width: 960px;
-  margin-left: 10px;
+  margin-left: 30px;
   padding: 32px 16px 80px;
 }
 
@@ -70,6 +80,14 @@ function excerpt(text?: string, words = 50) {
   font-size: 28px;
   line-height: 1.2;
   margin: 0 0 24px;
+}
+
+.intro {
+  max-width: 640px;
+  font-size: 15px;
+  color: #000000;
+  line-height: 1.3;
+  text-align: justify;
 }
 
 .list {
@@ -83,7 +101,6 @@ function excerpt(text?: string, words = 50) {
   gap: 24px;
   align-items: flex-start;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e7e7e7;
 }
 
 .media {

@@ -61,7 +61,7 @@ function excerpt(text?: string, words = 40) {
 <style scoped>
 .wrap {
   max-width: 960px;
-  margin-left: 10px;
+  margin-left: 30px;
   padding: 32px 16px 80px;
 }
 
@@ -88,13 +88,14 @@ function excerpt(text?: string, words = 40) {
 
 .item {
   display: flex;
-  gap: 24px;
+  gap: 32px;
   align-items: flex-start;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #ffffff;
 }
 
 .media {
+  margin: 0;
   flex: 0 0 280px; /* largeur fixe image */
 }
 .media img {

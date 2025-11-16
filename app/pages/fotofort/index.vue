@@ -62,7 +62,7 @@ function excerpt(input: unknown, words = 40) {
 <style scoped>
 .wrap {
   max-width: 960px;
-  margin-left: 10px;
+  margin-left: 30px;
   padding: 32px 16px 80px;
 }
 
@@ -89,12 +89,15 @@ function excerpt(input: unknown, words = 40) {
 
 .item {
   display: flex;
-  gap: 24px;
+  gap: 34px;
   align-items: flex-start;
   padding-bottom: 24px;
+  border-bottom: 1px solid #ffffff;
+  line-height: 1.1;
 }
 
 .media {
+  margin: 0;
   flex: 0 0 280px; /* largeur fixe image */
 }
 .media img {
@@ -127,7 +130,7 @@ function excerpt(input: unknown, words = 40) {
 .excerpt {
   color: #333;
   line-height: 1.5;
-  margin: 0;
+
 }
 .empty {
   color: #666;

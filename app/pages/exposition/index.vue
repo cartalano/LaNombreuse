@@ -100,6 +100,7 @@ function excerpt(text?: string, words = 50) {
   align-items: flex-start;
   padding-bottom: 24px;
   border-bottom: 1px solid #ffffff;
+  line-height: 1.1;
 }
 
 .media {
