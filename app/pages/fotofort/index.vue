@@ -61,7 +61,7 @@ function excerpt(input: unknown, words = 40) {
 
 <style scoped>
 .wrap {
-  max-width: 960px;
+  max-width: 820px;
   margin-left: 30px;
   padding: 32px 16px 80px;
 }
@@ -98,7 +98,7 @@ function excerpt(input: unknown, words = 40) {
 
 .media {
   margin: 0;
-  flex: 0 0 280px; /* largeur fixe image */
+  flex: 0 0 280px; 
 }
 .media img {
   display: block;
@@ -108,7 +108,6 @@ function excerpt(input: unknown, words = 40) {
 
 .content {
   flex: 1;
-  text-align: justify;
 }
 
 .title {

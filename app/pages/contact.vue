@@ -57,7 +57,7 @@ const contact = {
 <style scoped>
 
 .wrap {
-  max-width: 980px;
+  max-width: 820px;
   margin-left: 25px;
   padding: 20px 16px 80px;
 }
@@ -81,6 +81,7 @@ const contact = {
   border-radius: 12px;
   padding: 20px;
   background: #fff;
+
 }
 @media (min-width: 900px) {
   .card { grid-template-columns: 1fr 1.1fr; align-items: start; }
@@ -120,4 +121,5 @@ const contact = {
   height: auto;
   border-radius: 10px;
 }
+
 </style>

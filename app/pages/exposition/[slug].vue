@@ -88,24 +88,36 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
     </NuxtLink>
 
     <header class="head">
-      <h1 class="title">{{ item.title }}<span v-if="item.expotitre"> — <em>{{ item.expotitre }}</em></span></h1>
+      <h1 class="title">
+        {{ item.title }}
+        <span v-if="item.expotitre"> — <em>{{ item.expotitre }}</em></span>
+      </h1>
       <p v-if="item.period" class="date">{{ fmtRange(item.period) }}</p>
     </header>
 
-    <!-- Galerie principale -->
-    <section v-if="heroImages.length" class="gallery">
-      <figure v-for="(img,i) in heroImages" :key="`hero-${i}`" class="media">
-        <img :src="img.src" :alt="img.alt || `${item.title} — visuel ${i+1}`" loading="lazy" />
-        <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
-      </figure>
-      <VideoEmbed v-if="item.videoUrl" :url="item.videoUrl" />
+    <!-- BLOC HAUT : galerie principale à gauche + texte à droite -->
+    <section v-if="heroImages.length || descriptionHtml" class="top">
+      <!-- Galerie principale -->
+      <div v-if="heroImages.length" class="gallery main-gallery">
+        <figure v-for="(img,i) in heroImages" :key="`hero-${i}`" class="media">
+          <img
+            :src="img.src"
+            :alt="img.alt || `${item.title} — visuel ${i+1}`"
+            loading="lazy"
+          />
+          <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
+        </figure>
+
+        <!-- Vidéo liée à la galerie -->
+        <VideoEmbed v-if="item.videoUrl" :url="item.videoUrl" />
+      </div>
+
+      <!-- Description -->
+      <section v-if="descriptionHtml" class="body content" v-html="descriptionHtml" />
     </section>
 
-    <!-- Texte -->
-    <section v-if="descriptionHtml" class="body content" v-html="descriptionHtml" />
-
-    <!-- Fichiers images -->
-    <section v-if="fileImages.length" class="gallery">
+    <!-- BLOC BAS : fichiers images, plein largeur -->
+    <section v-if="fileImages.length" class="gallery files-gallery">
       <figure v-for="(img,i) in fileImages" :key="`file-${i}`" class="media">
         <img :src="img.src" :alt="img.alt || `${item.title} — fichier ${i+1}`" loading="lazy" />
         <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
@@ -124,64 +136,80 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
 </template>
 
 
+
 <style scoped>
-.wrap { 
-  max-width: 960px; 
-  margin-left: 10px; 
-  padding: 24px 16px 80px; 
+.wrap {
+  max-width: 960px;
+  margin-left: 10px;
+  padding: 24px 16px 80px;
 }
 
-.back { 
-  display: inline-flex; 
-  align-items: center; 
-  color: #111; 
+.back {
+  display: inline-flex;
+  align-items: center;
+  color: #111;
   text-decoration: none;
-   margin-bottom: 12px; 
-  }
-  
-.back:hover { 
-  opacity: .8; 
+  margin-bottom: 12px;
+}
+.back:hover { opacity: .8; }
+
+.head {
+  display: block;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.title {
+  font-size: 28px;
+  line-height: 1.2;
+  margin: 0;
+}
+.date {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
 }
 
-.head { 
-  display: block; 
-  gap: 16px;  
-  margin-bottom: 16px; 
+/* BLOC HAUT : galerie principale + texte */
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 12px 0 32px;
 }
 
-.title { 
-  font-size: 28px; 
-  line-height: 1.2; 
-  margin: 0; 
+/* Galerie générique */
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 
-.date { 
-  margin: 0; 
-  color: #666; 
-  font-size: 14px; 
+/* Galerie principale (colonne de gauche sur desktop) */
+.main-gallery {
+  max-width: 540px;
 }
 
-.gallery { 
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 16px; 
-  margin: 12px 0 24px; 
-}
-.gallery img { 
-  display: block; 
-  width: 100%; 
-  max-width: 900px; 
-  height: auto;
-  margin: 0 auto; 
+/* Fichiers images (plein largeur, centré) */
+.files-gallery {
+  margin-top: 32px;
 }
 
+/* Figures / images */
 .media {
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+.media img {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin: 0 auto;
+}
 
+/* Crédit */
 .credit {
   margin-top: 6px;
   width: 100%;
@@ -189,18 +217,39 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
   font-size: 12px;
   color: #777;
   font-style: italic;
-  text-align: left;  /* ou left si tu préfères */
+  text-align: left;
 }
 
-.body { 
-  line-height: 1.65; 
+/* Texte */
+.body {
+  line-height: 1.65;
   color: #222;
-  text-align: justify;
-  text-justify: inter-word; 
 }
-.body :deep(p) { margin: 0 0 1em; }
+.body :deep(p) {
+  margin: 0 0 1em;
+}
 
+/* Desktop : description à droite de la galerie principale */
 @media (min-width: 1024px) {
-  .gallery { grid-template-columns: 1fr 1fr; }
+  .top {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .main-gallery {
+    flex: 1 1 55%;
+  }
+
+  .body {
+    flex: 1 1 45%;
+    max-width: none;
+    margin-left: 24px;
+  }
+
+  /* Galerie des fichiers en 2 colonnes sur la largeur du wrap */
+  .files-gallery {
+    grid-template-columns: 1fr 1fr;
+  }
 }
+
 </style>

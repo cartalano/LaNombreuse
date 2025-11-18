@@ -60,7 +60,7 @@ La Nombreuse met son espace à disposition pour présenter ton travail en cours 
 
 <style scoped>
 .wrap {
-  max-width: 960px;
+  max-width: 820px;
   margin-left: 30px;
   padding: 32px 16px 80px;
 }
@@ -106,7 +106,6 @@ La Nombreuse met son espace à disposition pour présenter ton travail en cours 
 
 .content {
   flex: 1;
-  text-align: justify;
 }
 
 .title {

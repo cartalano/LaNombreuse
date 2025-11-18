@@ -60,7 +60,7 @@ function excerpt(text?: string, words = 40) {
 
 <style scoped>
 .wrap {
-  max-width: 960px;
+  max-width: 820px;
   margin-left: 30px;
   padding: 32px 16px 80px;
 }
@@ -106,7 +106,6 @@ function excerpt(text?: string, words = 40) {
 
 .content {
   flex: 1;
-  text-align: justify;
 }
 
 .title {

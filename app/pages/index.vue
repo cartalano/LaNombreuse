@@ -136,13 +136,13 @@ function toUrl(e:any) { return `/${e.routeBase}/${e.slug}` }
 /* À venir */
 .upcoming-grid {
    display: grid; 
-   gap: 16px; 
+   gap: 16px;
   }
 
 .upcoming-grid.one .hero-card {
   /* taille cible de la card : ajuste selon ton header/viewport */
   --card-max-h: 520px;
-  max-width: 900px;           /* optionnel */
+  max-width: var(--card-max-h);;           /* optionnel */
   max-height: var(--card-max-h);
   margin: 0 auto;
 
@@ -168,7 +168,7 @@ function toUrl(e:any) { return `/${e.routeBase}/${e.slug}` }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f7f7f7;
+  background: #ffffff;
 }
 
 /* L'image s'adapte SANS rognage et reste entière */
@@ -250,7 +250,7 @@ function toUrl(e:any) { return `/${e.routeBase}/${e.slug}` }
   border:1px solid #eee; 
   border-radius: 10px; 
   overflow:hidden; 
-  background:#fff; 
+  background:#ffffff; 
 }
 .card img { 
   width:100%; 
@@ -282,7 +282,6 @@ function toUrl(e:any) { return `/${e.routeBase}/${e.slug}` }
 
 /* Hover subtil */
 .hero-card:hover, .card:hover { 
-  box-shadow: 0 6px 24px rgba(0,0,0,.06); 
   transform: translateY(-1px); 
   transition: .2s ease; 
 }

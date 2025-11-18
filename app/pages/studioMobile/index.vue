@@ -71,7 +71,7 @@ function excerpt(text?: string, words = 50) {
 
 <style scoped>
 .wrap {
-  max-width: 960px;
+  max-width: 820px;
   margin-left: 30px;
   padding: 32px 16px 80px;
 }
@@ -87,13 +87,14 @@ function excerpt(text?: string, words = 50) {
   font-size: 15px;
   color: #000000;
   line-height: 1.3;
-  text-align: justify;
+  
 }
 
 .list {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  
 }
 
 .item {
