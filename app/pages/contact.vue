@@ -11,7 +11,7 @@ const contact = {
 
 <template>
   <main class="wrap">
-    <p class="intro">
+    <div class="intro">
      <h2> Présentation </h2>
       Créée en 2020, l’ASBL La Nombreuse n’est ni une galerie ni un “white cube”, mais un espace polymorphe dédié à la création photographique, conventionné par la Fédération Wallonie-Bruxelles et soutenu par la Commission communautaire française depuis ses débuts.
       À sa racine : huit photographes et une coordinatrice, réunis par plusieurs envies communes. Celle de créer de nouvelles synergies, de mutualiser leurs compétences et de présenter aux publics la diversité des talents qui s’activent dans les domaines liés à la photographie.
@@ -23,7 +23,7 @@ const contact = {
       Ouverte aux collaborations, La Nombreuse reste à l’écoute des demandes, des besoins et des projets à venir — qu’il s’agisse de sous-traitance, de commandes spécifiques ou d’initiatives culturelles à imaginer ensemble.
       <h3> Ils nous ont fait confiance :</h3> 
       La Royale Union Saint-Gilloise - La Concertation - L’ISELP - Arts & Marges - Face_B - Wolubilis - Centre culturel Jacques Franck - L’Union Foundation - La commune de Saint - Gilles - La Clairière - Le Parc National Entre-Sambre-et-Meuse - La Brique - Les Festivals de Wallonie 
-    </p>
+    </div>
 
     <section class="card">
       <div class="info">

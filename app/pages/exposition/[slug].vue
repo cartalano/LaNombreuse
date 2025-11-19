@@ -222,7 +222,7 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
 
 /* Texte */
 .body {
-  line-height: 1.65;
+  line-height: 1.5;
   color: #222;
 }
 .body :deep(p) {

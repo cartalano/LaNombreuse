@@ -97,30 +97,33 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
       <p v-if="item.period" class="date">{{ fmtRange(item.period) }}</p>
     </header>
 
-    <!-- Galerie principale -->
-    <section v-if="heroImages.length" class="gallery">
-      <figure v-for="(img,i) in heroImages" :key="`hero-${i}`" class="media">
-        <img :src="img.src" :alt="img.alt || `${item.title} — visuel ${i+1}`" loading="lazy" />
-        <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
-      </figure>
+    <!-- BLOC HAUT : galerie principale à gauche + description à droite -->
+    <section v-if="heroImages.length || descriptionHtml" class="top">
+      <!-- Galerie principale -->
+      <div v-if="heroImages.length" class="gallery main-gallery">
+        <figure v-for="(img,i) in heroImages" :key="`hero-${i}`" class="media">
+          <img
+            :src="img.src"
+            :alt="img.alt || `${item.title} — visuel ${i+1}`"
+            loading="lazy"
+          />
+          <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
+        </figure>
+
+        <!-- Vidéo liée au workshop -->
+        <VideoEmbed v-if="item.videoUrl" :url="item.videoUrl" />
+      </div>
+
+      <!-- Description -->
+      <section v-if="descriptionHtml" class="body content" v-html="descriptionHtml" />
     </section>
 
-    <!-- Description -->
-    <section v-if="descriptionHtml" class="body content" v-html="descriptionHtml" />
-
-    <!-- Fichiers images additionnels -->
-    <section v-if="fileImages.length" class="gallery">
+    <!-- BLOC BAS : fichiers images, plein largeur -->
+    <section v-if="fileImages.length" class="gallery files-gallery">
       <figure v-for="(img,i) in fileImages" :key="`file-${i}`" class="media">
         <img :src="img.src" :alt="img.alt || `${item.title} — fichier ${i+1}`" loading="lazy" />
         <figcaption v-if="img.caption" class="credit">{{ img.caption }}</figcaption>
       </figure>
-    </section>
-
-    <!-- Vidéo (seule ou en plus) -->
-    <section v-if="item.videoUrl" class="gallery">
-      <div class="video-wrap">
-        <VideoEmbed :url="item.videoUrl" />
-      </div>
     </section>
   </main>
 
@@ -152,17 +155,48 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
 .back:hover { opacity: .8; }
 
 /* Header */
-.head { display: block; gap: 16px; margin-bottom: 16px; }
-.title { font-size: 28px; line-height: 1.2; margin: 0; }
-.date { margin: 0; color: #666; font-size: 14px; }
+.head {
+  display: block;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.title {
+  font-size: 28px;
+  line-height: 1.2;
+  margin: 0;
+}
+.date {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
 
-/* Galerie */
+/* BLOC HAUT : galerie principale + texte */
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 12px 0 32px;
+}
+
+/* Galerie générique */
 .gallery {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-  margin: 12px 0 24px;
 }
+
+/* Galerie principale (colonne gauche desktop) */
+.main-gallery {
+  max-width: 540px;
+}
+
+/* Fichiers images additionnels : plein largeur, centrés */
+.files-gallery {
+  margin-top: 32px;
+}
+
+/* Figures / images */
 .media {
   margin: 0;
   display: flex;
@@ -192,10 +226,20 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
 .body {
   line-height: 1.65;
   color: #222;
-  text-align: justify;
-  text-justify: inter-word;
 }
-.body :deep(p) { margin: 0 0 1em; }
+.body :deep(p) {
+  margin: 0 0 1em;
+}
+.body :deep(a) {
+  color: inherit;
+  text-decoration: none;
+}
+.body :deep(a:hover) {
+  text-decoration: underline;
+}
+.body :deep(a:visited) {
+  color: inherit;
+}
 
 /* Vidéo */
 .video-wrap {
@@ -205,8 +249,26 @@ function fmtRange(period?: { startDate?: string; endDate?: string }) {
   overflow: hidden;
 }
 
-/* Responsive */
+/* Desktop : description à droite de la galerie principale,
+   fichiers en 2 colonnes */
 @media (min-width: 1024px) {
-  .gallery { grid-template-columns: 1fr 1fr; }
+  .top {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .main-gallery {
+    flex: 1 1 55%;
+  }
+
+  .body {
+    flex: 1 1 45%;
+    max-width: none;
+    margin-left: 24px;
+  }
+
+  .files-gallery {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 </style>

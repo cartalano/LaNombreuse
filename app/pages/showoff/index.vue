@@ -88,7 +88,7 @@ La Nombreuse met son espace à disposition pour présenter ton travail en cours 
 
 .item {
   display: flex;
-  gap: 32px;
+  gap: 34px;
   align-items: flex-start;
   padding-bottom: 24px;
   border-bottom: 1px solid #ffffff;
@@ -131,5 +131,53 @@ La Nombreuse met son espace à disposition pour présenter ton travail en cours 
 }
 .empty {
   color: #666;
+}
+
+@media (max-width: 900px) {
+  .wrap {
+    padding: 24px 16px 60px;
+  }
+
+  .item {
+    gap: 20px;
+  }
+
+  .media {
+    flex: 0 0 220px;
+  }
+}
+
+/* Mobile : image au-dessus, texte en-dessous */
+@media (max-width: 640px) {
+  .page-title {
+    font-size: 24px;
+  }
+
+  .intro {
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+
+  .item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .media {
+    flex: 0 0 auto;
+  }
+
+  .media img {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .date {
+    font-size: 13px;
+  }
 }
 </style>

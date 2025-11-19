@@ -117,6 +117,7 @@ function toUrl(e:any) { return `/${e.routeBase}/${e.slug}` }
     </section>
   </main>
   <NewsLetterForm />
+  <Footer />
 </template>
 
 <style scoped>
@@ -154,7 +155,7 @@ function toUrl(e:any) { return `/${e.routeBase}/${e.slug}` }
 
 /* Le lien occupe toute la card et devient flex colonne */
 .upcoming-grid.one .hero-link {
-  display: flex;              /* au lieu de grid */
+  display: flex;              
   flex-direction: column;
   height: 100%;
   color: inherit;
@@ -176,8 +177,8 @@ function toUrl(e:any) { return `/${e.routeBase}/${e.slug}` }
   max-width: 100%;
   max-height: 100%;
   width: auto;
-  height: auto;               /* pas de height:100% ici */
-  object-fit: contain;        /* montre l’image entière */
+  height: auto;               
+  object-fit: contain;        
 }
 
 /* Le texte reste en bas, taille fixe/auto, non rogné */
@@ -270,10 +271,10 @@ function toUrl(e:any) { return `/${e.routeBase}/${e.slug}` }
 .cards a,
 .cards a:link,
 .cards a:visited {
-  color: inherit;           /* garde la couleur du texte (pas violet) */
-  text-decoration: none;    /* enlève le soulignement */
+  color: inherit;           
+  text-decoration: none;    
   outline: none;
-  -webkit-tap-highlight-color: transparent; /* mobile */
+  -webkit-tap-highlight-color: transparent; 
 }
 
 .empty { 

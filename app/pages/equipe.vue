@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { marked } from 'marked'
 const { get, mediaUrl } = useApi()
 const { galleryUrls } = useMedia()
 
@@ -30,6 +31,7 @@ const members = computed(() =>
       lastName: a.lastName ?? '',
       role: a.role ?? '',
       bio:  a.bio  ?? '',
+      bioHtml:   a.bio ? marked.parse(a.bio) : '',
       // useMedia va convertir en URLs absolues et gérer plat/classique
       gallery: galleryFrom(a, { cover: 'photo', gallery: 'portfolio', limit: 6 })
     }
@@ -48,8 +50,13 @@ const members = computed(() =>
           <TeamCaroussel :images="m.gallery" alt="Visuels membre" :start="0" />
         </div>
         <div class="right">
-          <h2 class="name">{{ m.firstName }} {{ m.lastName }}<small v-if="m.role"> — {{ m.role }}</small></h2>
-          <div v-if="m.bio" class="bio" v-html="m.bio" />
+          <h2 class="name">
+            {{ m.firstName }} {{ m.lastName }}
+            <small v-if="m.role"> — {{ m.role }}</small>
+          </h2>
+
+          <!-- bio en HTML (markdown rendu) -->
+          <div v-if="m.bioHtml" class="bio" v-html="m.bioHtml" />
         </div>
       </article>
     </section>
@@ -58,12 +65,12 @@ const members = computed(() =>
   </main>
 </template>
 
+
 <style scoped>
 .wrap {
-  max-width: 960px;
+  max-width: 920px;
   margin-left: 30px;
   padding: 32px 16px 80px;
-  text-align: justify;
 }
 
 .page-title {
@@ -78,14 +85,6 @@ const members = computed(() =>
   gap: 5rem; 
 }
 
-.bio { 
-  margin-top: 1rem;
-  font-size: 1rem;
-  line-height: 1.3; 
-}
-
-
-
 .card { 
   display: grid;
   grid-template-columns: 320px 1fr; 
@@ -96,11 +95,46 @@ const members = computed(() =>
   min-width: 0; 
 }
 
-.name { margin: 0 0 .5rem; font-size: 1.4rem; }
-.name small { font-weight: normal; color: #666; }
-.bio :deep(p) { margin: .6rem 0; line-height: 1.55; }
-.bio :deep(a) { color: inherit; text-decoration: underline; }
-.bio :deep(h2), .bio :deep(h3) { margin: 1rem 0 .5rem; }
+.name { 
+  margin: 0 0 .5rem; 
+  font-size: 1.4rem; 
+}
+.name small { 
+  font-weight: normal; 
+  color: #666; 
+}
 
-@media (max-width: 1024px) { .card { grid-template-columns: 1fr; } }
+/* Texte bio */
+.bio { 
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.3; 
+}
+
+.bio :deep(p) { 
+  margin: .6rem 0; 
+  line-height: 1.55; 
+}
+
+/* Liens dans le markdown : pas de violet ni underline permanent */
+.bio :deep(a) { 
+  color: inherit;          /* garde la couleur du texte */
+  text-decoration: none;   /* enlève le soulignement */
+}
+.bio :deep(a:hover) {
+  text-decoration: underline;  /* optionnel : underline au hover */
+}
+.bio :deep(a:visited) {
+  color: inherit;              /* évite le violet */
+}
+
+.bio :deep(h2),
+.bio :deep(h3) { 
+  margin: 1rem 0 .5rem; 
+}
+
+@media (max-width: 1024px) {
+  .card { grid-template-columns: 1fr; }
+}
 </style>
+
