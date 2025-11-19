@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+const config = useRuntimeConfig()
+const apiBase = config.public.apiBase   
 
 const email = ref('')
 const loading = ref(false)
@@ -21,24 +23,40 @@ async function subscribe() {
 
   try {
     loading.value = true
-    await $fetch('/api/newsletter', {
+
+    await $fetch(`${apiBase}/newsletter-subs`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: {
-        email: email.value,
-        source: 'homepage'
+        data: {
+          email: email.value,
+          source: 'homepage',
+          consent: true
+        }
       }
     })
+
     message.value = 'Merci ! Vous êtes inscrit(e) à la newsletter.'
     email.value = ''
   } catch (e: any) {
-    if (e?.status === 409) error.value = 'Cette adresse est déjà inscrite.'
-    else if (e?.status === 400) error.value = 'Adresse invalide.'
-    else error.value = 'Une erreur est survenue. Réessayez plus tard.'
+    const status = e?.response?.status
+    const msg = e?.response?._data?.error?.message || ''
+
+    if (msg.toLowerCase().includes('unique')) {
+      error.value = 'Cette adresse est déjà inscrite.'
+    } else if (status === 400) {
+      error.value = 'Adresse invalide.'
+    } else {
+      error.value = 'Une erreur est survenue. Réessayez plus tard.'
+    }
   } finally {
     loading.value = false
   }
 }
 </script>
+
 
 <template>
   <section class="nl">
