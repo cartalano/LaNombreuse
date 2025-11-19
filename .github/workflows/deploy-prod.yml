@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.PROD_FTP_PASS }}
           protocol: ftps
           local-dir: .output/public/
-          server-dir: /sites/lanombreuse.com
+          server-dir: /sites/lanombreuse.com/
           dangerous-clean-slate: true
           exclude: |
             **/.git/**
