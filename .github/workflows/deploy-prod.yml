@@ -39,7 +39,7 @@ jobs:
           server-dir: /sites/lanombreuse.com
           dangerous-clean-slate: true
           exclude:
-            - '**/.git*'
+            - '**/.git/**'
             - '**/.github/**'
             - '**/node_modules/**'
             - 'staging-public.zip'
