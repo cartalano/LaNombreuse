@@ -38,8 +38,8 @@ jobs:
           local-dir: .output/public/
           server-dir: /sites/lanombreuse.com
           dangerous-clean-slate: true
-          exclude:
-            - '**/.git/**'
-            - '**/.github/**'
-            - '**/node_modules/**'
-            - 'staging-public.zip'
+          exclude: |
+            **/.git/**
+            **/.github/**
+            **/node_modules/**
+            staging-public.zip
