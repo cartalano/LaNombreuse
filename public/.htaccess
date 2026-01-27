@@ -1,12 +1,18 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /
 
-  # Si le fichier OU le dossier existe, on le sert normalement
+  # 1) Force HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://lanombreuse.com%{REQUEST_URI} [L,R=301]
+
+  # 2) Force non-www
+  RewriteCond %{HTTP_HOST} ^www\.lanombreuse\.com$ [NC]
+  RewriteRule ^ https://lanombreuse.com%{REQUEST_URI} [L,R=301]
+
+  # 3) SPA fallback (refresh des routes)
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Sinon, on renvoie vers l'app (SPA fallback)
   RewriteRule ^ index.html [L]
 </IfModule>
