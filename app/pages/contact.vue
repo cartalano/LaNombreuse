@@ -13,7 +13,9 @@ const contact = {
   <main class="wrap">
     <div class="intro">
      <h2> Missions </h2>
-      "Située au 42 rue du Fort, l’ASBL La Nombreuse n’est ni une galerie ni un “white cube”, mais un espace polymorphe dédié à la création photographique, conventionné depuis 2025 par la Fédération Wallonie-Bruxelles et soutenu par la Commission communautaire française depuis sa création en 2020. "
+      Située au 42 rue du Fort, l’ASBL La Nombreuse n’est ni une galerie ni un “white cube”, 
+      mais un espace polymorphe dédié à la création photographique, conventionné depuis 2025 par la Fédération Wallonie-Bruxelles
+       et soutenu par la Commission communautaire française depuis sa création en 2020. 
       <h2> Espace de services</h2> 
       En parallèle, La Nombreuse est aussi un espace de services.
       Grâce à ses membres, elle répond à des commandes en photographie événementielle, d’entreprise, d’architecture, ainsi qu’en reproduction d’œuvres d’art, photographie culinaire et photographie de presse.
