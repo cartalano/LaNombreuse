@@ -12,10 +12,8 @@ const contact = {
 <template>
   <main class="wrap">
     <div class="intro">
-     <h2> Présentation </h2>
-      Créée en 2020, l’ASBL La Nombreuse n’est ni une galerie ni un “white cube”, mais un espace polymorphe dédié à la création photographique, conventionné par la Fédération Wallonie-Bruxelles et soutenu par la Commission communautaire française depuis ses débuts.
-      À sa racine : huit photographes et une coordinatrice, réunis par plusieurs envies communes. Celle de créer de nouvelles synergies, de mutualiser leurs compétences et de présenter aux publics la diversité des talents qui s’activent dans les domaines liés à la photographie.
-      Ensemble, iels s’attachent à montrer la vivacité et la richesse de cette scène en partageant leur passion pour l’image à travers des expositions novatrices, des visites guidées, des workshops gratuits pour des publics spécifiques, des animations scolaires, des conférences, des discussions et des collaborations surprenantes. En transmettant simplement des clés de compréhension et de lecture, La Nombreuse partage ses connaissances et ses apprentissages au sujet des images qui façonnent notre époque, nos sociétés et nos identités. 
+     <h2> Missions </h2>
+      "Située au 42 rue du Fort, l’ASBL La Nombreuse n’est ni une galerie ni un “white cube”, mais un espace polymorphe dédié à la création photographique, conventionné depuis 2025 par la Fédération Wallonie-Bruxelles et soutenu par la Commission communautaire française depuis sa création en 2020. "
       <h2> Espace de services</h2> 
       En parallèle, La Nombreuse est aussi un espace de services.
       Grâce à ses membres, elle répond à des commandes en photographie événementielle, d’entreprise, d’architecture, ainsi qu’en reproduction d’œuvres d’art, photographie culinaire et photographie de presse.
